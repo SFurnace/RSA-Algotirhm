@@ -23,26 +23,26 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import static javafx.scene.control.Alert.AlertType.ERROR;
-import static javafx.scene.input.TransferMode.ANY;
 import static javafx.scene.input.TransferMode.COPY;
+import static javafx.scene.input.TransferMode.MOVE;
 
 public class FileController {
-    private static String CANNOT_DROP_CLASS = "dropPane-cannot-drop";
-    private static String COMPLETE_CLASS = "dropPane-complete";
-    private static String CAN_DROP_CLASS = "dropPane-can-drop";
-    private static String PROCESSING_CLASS = "dropPane-processing";
-    private static String HAS_FILE_CLASS = "dropPane-has-file";
-    private static String HOVER_CLASS = "dropPane-hover";
+    static String CANNOT_DROP_CLASS = "dropPane-cannot-drop";
+    static String SUCCESS_CLASS = "dropPane-success";
+    static String CAN_DROP_CLASS = "dropPane-can-drop";
+    static String PROCESSING_CLASS = "dropPane-processing";
+    static String HAS_FILE_CLASS = "dropPane-has-file";
+    static String WARNING_CLASS = "dropPane-warning";
 
-    private static Set<String> ALL_CLASS = Set.of(CAN_DROP_CLASS, CANNOT_DROP_CLASS, COMPLETE_CLASS,
-            PROCESSING_CLASS, HAS_FILE_CLASS, HOVER_CLASS);
+    private static Set<String> ALL_CLASS = Set.of(CAN_DROP_CLASS, CANNOT_DROP_CLASS, SUCCESS_CLASS,
+            PROCESSING_CLASS, HAS_FILE_CLASS, WARNING_CLASS);
     @FXML
     private Pane encryptPane;
     @FXML
     private Pane decryptPane;
     private volatile Thread workThread;
 
-    private static void setPaneClass(Pane pane, String clazz) {
+    static void setPaneClass(Pane pane, String clazz) {
         pane.getStyleClass().removeAll(classesExcluded(clazz));
         pane.getStyleClass().add(clazz);
     }
@@ -61,24 +61,11 @@ public class FileController {
         event.consume();
     }
 
-    private void dragEntered(Pane pane, DragEvent event) {
-        if (event.getGestureSource() != encryptPane && event.getGestureSource() != decryptPane) {
-            pane.getStyleClass().add(HOVER_CLASS);
-        }
-        event.consume();
-    }
-
-    private void dragExited(Pane pane, DragEvent event) {
-        if (event.getGestureSource() != encryptPane && event.getGestureSource() != decryptPane) {
-            pane.getStyleClass().remove(HOVER_CLASS);
-        }
-        event.consume();
-    }
-
     private void dragDetected(Pane pane, MouseEvent event) {
         File data = (File) pane.getUserData();
         if (data != null && data.exists()) {
-            Dragboard dragboard = pane.startDragAndDrop(ANY);
+            Dragboard dragboard = pane.startDragAndDrop(MOVE);
+
             ClipboardContent content = new ClipboardContent();
             content.putFiles(List.of(data));
             dragboard.setContent(content);
@@ -99,16 +86,6 @@ public class FileController {
         } finally {
             event.consume();
         }
-    }
-
-    @FXML
-    private void dragEnteredE(DragEvent event) {
-        dragEntered(encryptPane, event);
-    }
-
-    @FXML
-    private void dragExitedE(DragEvent event) {
-        dragExited(encryptPane, event);
     }
 
     @FXML
@@ -161,16 +138,6 @@ public class FileController {
 
         event.setDropCompleted(true);
         event.consume();
-    }
-
-    @FXML
-    private void dragEnteredD(DragEvent event) {
-        dragEntered(decryptPane, event);
-    }
-
-    @FXML
-    private void dragExitedD(DragEvent event) {
-        dragExited(decryptPane, event);
     }
 
     @FXML
@@ -242,13 +209,13 @@ public class FileController {
 
     private void showEncryptedFile(Path path) {
         decryptPane.setUserData(path.toFile());
-        setPaneClass(encryptPane, COMPLETE_CLASS);
+        setPaneClass(encryptPane, SUCCESS_CLASS);
         setPaneClass(decryptPane, HAS_FILE_CLASS);
     }
 
     private void showDecryptedFile(Path path) {
         encryptPane.setUserData(path.toFile());
         setPaneClass(encryptPane, HAS_FILE_CLASS);
-        setPaneClass(decryptPane, COMPLETE_CLASS);
+        setPaneClass(decryptPane, SUCCESS_CLASS);
     }
 }

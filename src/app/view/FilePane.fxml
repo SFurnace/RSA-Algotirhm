@@ -11,16 +11,14 @@
                    AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <items>
                 <Pane fx:id="encryptPane" onDragDetected="#dragDetectedE" onDragDone="#dragDoneE"
-                      onDragDropped="#dragDroppedE" onDragEntered="#dragEnteredE" onDragExited="#dragExitedE"
-                      onDragOver="#dragOver" prefHeight="200.0" prefWidth="200.0">
+                      onDragDropped="#dragDroppedE" onDragOver="#dragOver" prefHeight="200.0" prefWidth="200.0">
                     <styleClass>
                         <String fx:value="dropPane"/>
                         <String fx:value="dropPane-can-drop"/>
                     </styleClass>
                 </Pane>
                 <Pane fx:id="decryptPane" onDragDetected="#dragDetectedD" onDragDone="#dragDoneD"
-                      onDragDropped="#dragDroppedD" onDragEntered="#dragEnteredD" onDragExited="#dragExitedD"
-                      onDragOver="#dragOver" prefHeight="200.0" prefWidth="200.0">
+                      onDragDropped="#dragDroppedD" onDragOver="#dragOver" prefHeight="200.0" prefWidth="200.0">
                     <styleClass>
                         <String fx:value="dropPane"/>
                         <String fx:value="dropPane-can-drop"/>

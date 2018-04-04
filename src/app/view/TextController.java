@@ -120,14 +120,4 @@ public class TextController {
         textInputE.setStyle("-fx-background-color: #ffffff");
         textInputD.setStyle("-fx-background-color: #ffffff");
     }
-
-    private void clearTextAreaContent() {
-        textInputE.setText("");
-        textInputD.setText("");
-    }
-
-    void prepare() {
-        clearTextAreaBColor();
-        clearTextAreaContent();
-    }
 }

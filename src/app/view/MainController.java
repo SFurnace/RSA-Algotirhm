@@ -19,6 +19,7 @@ import java.io.File;
 import java.io.IOException;
 
 import static javafx.scene.control.Alert.AlertType.ERROR;
+import static javafx.scene.control.Alert.AlertType.WARNING;
 
 public class MainController {
     private static MainController mainController;
@@ -33,32 +34,6 @@ public class MainController {
     private Circle keyCircle;
     @FXML
     private Button keyButton;
-
-    private Node functionsPane;
-
-    private Node textPane;
-    private TextController textController;
-
-    private Node identityPane;
-
-    private Node filePane;
-
-    {
-        try {
-            functionsPane = FXMLLoader.load(getClass().getResource("FunctionsPane.fxml"));
-
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("TextPane.fxml"));
-            textPane = loader.load();
-            textController = loader.getController();
-
-            identityPane = FXMLLoader.load(getClass().getResource("IdentityPane.fxml"));
-            filePane = FXMLLoader.load(getClass().getResource("FilePane.fxml"));
-        } catch (IOException e) {
-            e.printStackTrace();
-            new Alert(ERROR, e.getMessage()).showAndWait();
-            System.exit(-1);
-        }
-    }
 
     static MainController getMainController() {
         return mainController;
@@ -105,77 +80,97 @@ public class MainController {
         changeToFunctionsPane();
     }
 
-    private void changePane(Node pane) {
-        mainPane.getChildren().clear();
-        mainPane.getChildren().add(pane);
+    private void changePane(String fileName, boolean toFunctionsPane) {
+        if (App.getRsa().isPresent() || toFunctionsPane) {
+            try {
+                Node node = FXMLLoader.load(getClass().getResource(fileName));
+                mainPane.getChildren().clear();
+                mainPane.getChildren().add(node);
 
-        Timeline timeline = new Timeline();
-        Duration duration = Duration.seconds(0.5);
-
-        KeyFrame paneStart = new KeyFrame(Duration.ZERO, new KeyValue(pane.opacityProperty(), 0));
-        KeyFrame paneEnd = new KeyFrame(duration, new KeyValue(pane.opacityProperty(), 1));
-
-        timeline.getKeyFrames().addAll(paneStart, paneEnd);
-        if (pane == functionsPane) {
-            KeyFrame frame = new KeyFrame(
-                    duration,
-                    new KeyValue(keyCircle.radiusProperty(), 35),
-                    new KeyValue(keyCircle.layoutXProperty(), 300),
-                    new KeyValue(keyCircle.layoutYProperty(), 200),
-                    new KeyValue(keyButton.layoutXProperty(), 270),
-                    new KeyValue(keyButton.layoutYProperty(), 170),
-
-                    new KeyValue(returnCircle.radiusProperty(), 35),
-                    new KeyValue(returnCircle.layoutXProperty(), 300),
-                    new KeyValue(returnCircle.layoutYProperty(), 200),
-                    new KeyValue(returnCircle.visibleProperty(), false),
-                    new KeyValue(returnButton.layoutXProperty(), 270),
-                    new KeyValue(returnButton.layoutYProperty(), 170),
-                    new KeyValue(returnButton.visibleProperty(), false)
-            );
-            timeline.getKeyFrames().addAll(frame);
+                Duration duration = Duration.seconds(0.5);
+                if (toFunctionsPane) {
+                    toFunctionsPaneAnimate(node, duration);
+                } else {
+                    toAnotherPaneAnimate(node, duration);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+                new Alert(ERROR, e.getMessage()).showAndWait();
+                System.exit(-1);
+            }
         } else {
-            KeyFrame frame0 = new KeyFrame(
-                    duration.divide(100),
-                    new KeyValue(returnCircle.visibleProperty(), true),
-                    new KeyValue(returnButton.visibleProperty(), true)
-            );
-
-            KeyFrame frame1 = new KeyFrame(
-                    duration,
-                    new KeyValue(keyCircle.radiusProperty(), 80),
-                    new KeyValue(keyCircle.layoutXProperty(), 600),
-                    new KeyValue(keyCircle.layoutYProperty(), 0),
-                    new KeyValue(keyButton.layoutXProperty(), 540),
-                    new KeyValue(keyButton.layoutYProperty(), 5),
-
-                    new KeyValue(returnCircle.radiusProperty(), 80),
-                    new KeyValue(returnCircle.layoutXProperty(), 600),
-                    new KeyValue(returnCircle.layoutYProperty(), 400),
-                    new KeyValue(returnButton.layoutXProperty(), 540),
-                    new KeyValue(returnButton.layoutYProperty(), 340)
-            );
-            timeline.getKeyFrames().addAll(frame0, frame1);
+            new Alert(WARNING, "Please select a RSA Key file.").showAndWait();
         }
+    }
 
+    private void toFunctionsPaneAnimate(Node node, Duration duration) {
+        Timeline timeline = new Timeline();
+        KeyFrame startFrame = new KeyFrame(Duration.ZERO, new KeyValue(node.opacityProperty(), 0));
+        KeyFrame endFrame = new KeyFrame(duration,
+                new KeyValue(node.opacityProperty(), 1),
+
+                new KeyValue(keyCircle.radiusProperty(), 35),
+                new KeyValue(keyCircle.layoutXProperty(), 300),
+                new KeyValue(keyCircle.layoutYProperty(), 200),
+                new KeyValue(keyButton.layoutXProperty(), 270),
+                new KeyValue(keyButton.layoutYProperty(), 170),
+
+                new KeyValue(returnCircle.radiusProperty(), 35),
+                new KeyValue(returnCircle.layoutXProperty(), 300),
+                new KeyValue(returnCircle.layoutYProperty(), 200),
+                new KeyValue(returnCircle.visibleProperty(), false),
+                new KeyValue(returnButton.layoutXProperty(), 270),
+                new KeyValue(returnButton.layoutYProperty(), 170),
+                new KeyValue(returnButton.visibleProperty(), false)
+        );
+
+        timeline.getKeyFrames().addAll(startFrame, endFrame);
         timeline.play();
     }
 
-    private void changeToFunctionsPane() {
-        changePane(functionsPane);
+    private void toAnotherPaneAnimate(Node node, Duration duration) {
+        Timeline timeline = new Timeline();
+        KeyFrame startFrame = new KeyFrame(Duration.ZERO, new KeyValue(node.opacityProperty(), 0));
+        KeyFrame frame1 = new KeyFrame(
+                duration.divide(100),
+                new KeyValue(returnCircle.visibleProperty(), true),
+                new KeyValue(returnButton.visibleProperty(), true)
+        );
+        KeyFrame endFrame = new KeyFrame(
+                duration,
+                new KeyValue(node.opacityProperty(), 1),
+
+                new KeyValue(keyCircle.radiusProperty(), 80),
+                new KeyValue(keyCircle.layoutXProperty(), 600),
+                new KeyValue(keyCircle.layoutYProperty(), 0),
+                new KeyValue(keyButton.layoutXProperty(), 540),
+                new KeyValue(keyButton.layoutYProperty(), 5),
+
+                new KeyValue(returnCircle.radiusProperty(), 80),
+                new KeyValue(returnCircle.layoutXProperty(), 600),
+                new KeyValue(returnCircle.layoutYProperty(), 400),
+                new KeyValue(returnButton.layoutXProperty(), 540),
+                new KeyValue(returnButton.layoutYProperty(), 340)
+        );
+
+        timeline.getKeyFrames().addAll(startFrame, frame1, endFrame);
+        timeline.play();
+    }
+
+    void changeToFunctionsPane() {
+        changePane("FunctionsPane.fxml", true);
     }
 
     void changeToFilePane() {
-        changePane(filePane);
+        changePane("FilePane.fxml", false);
     }
 
     void changeToTextPane() {
-        textController.prepare();
-        changePane(textPane);
+        changePane("TextPane.fxml", false);
     }
 
     void changeToIdentityPane() {
-        changePane(identityPane);
+        changePane("IdentityPane.fxml", false);
     }
 
     private void changeKeyBtnBackground() {
