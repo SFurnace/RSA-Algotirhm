@@ -71,7 +71,7 @@ public class App extends Application {
             }
         });
 
-        Parent root = FXMLLoader.load(getClass().getResource("view/main.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("view/MainPane.fxml"));
         primaryStage.setTitle("RSA");
         primaryStage.setScene(new Scene(root));
         primaryStage.setResizable(false);

@@ -11,7 +11,6 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Circle;
-import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.util.Duration;
@@ -25,17 +24,15 @@ public class MainController {
     private static MainController mainController;
 
     @FXML
-    private Button returnBtn;
+    private Pane mainPane;
+    @FXML
+    private Button returnButton;
     @FXML
     private Circle returnCircle;
     @FXML
-    private Pane mainPane;
-    @FXML
     private Circle keyCircle;
     @FXML
-    private Button keyBtn;
-    @FXML
-    private Text keyLabel;
+    private Button keyButton;
 
     private Node functionsPane;
 
@@ -48,14 +45,14 @@ public class MainController {
 
     {
         try {
-            functionsPane = FXMLLoader.load(getClass().getResource("functions.fxml"));
+            functionsPane = FXMLLoader.load(getClass().getResource("FunctionsPane.fxml"));
 
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("text.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("TextPane.fxml"));
             textPane = loader.load();
             textController = loader.getController();
 
-            identityPane = FXMLLoader.load(getClass().getResource("identity.fxml"));
-            filePane = FXMLLoader.load(getClass().getResource("file.fxml"));
+            identityPane = FXMLLoader.load(getClass().getResource("IdentityPane.fxml"));
+            filePane = FXMLLoader.load(getClass().getResource("FilePane.fxml"));
         } catch (IOException e) {
             e.printStackTrace();
             new Alert(ERROR, e.getMessage()).showAndWait();
@@ -125,25 +122,23 @@ public class MainController {
                     new KeyValue(keyCircle.radiusProperty(), 35),
                     new KeyValue(keyCircle.layoutXProperty(), 300),
                     new KeyValue(keyCircle.layoutYProperty(), 200),
-                    new KeyValue(keyLabel.opacityProperty(), 1),
-                    new KeyValue(keyBtn.layoutXProperty(), 270),
-                    new KeyValue(keyBtn.layoutYProperty(), 170),
+                    new KeyValue(keyButton.layoutXProperty(), 270),
+                    new KeyValue(keyButton.layoutYProperty(), 170),
 
                     new KeyValue(returnCircle.radiusProperty(), 35),
                     new KeyValue(returnCircle.layoutXProperty(), 300),
                     new KeyValue(returnCircle.layoutYProperty(), 200),
                     new KeyValue(returnCircle.visibleProperty(), false),
-                    new KeyValue(returnBtn.layoutXProperty(), 270),
-                    new KeyValue(returnBtn.layoutYProperty(), 170),
-                    new KeyValue(returnBtn.visibleProperty(), false)
+                    new KeyValue(returnButton.layoutXProperty(), 270),
+                    new KeyValue(returnButton.layoutYProperty(), 170),
+                    new KeyValue(returnButton.visibleProperty(), false)
             );
             timeline.getKeyFrames().addAll(frame);
         } else {
             KeyFrame frame0 = new KeyFrame(
                     duration.divide(100),
-                    new KeyValue(keyLabel.opacityProperty(), 0),
                     new KeyValue(returnCircle.visibleProperty(), true),
-                    new KeyValue(returnBtn.visibleProperty(), true)
+                    new KeyValue(returnButton.visibleProperty(), true)
             );
 
             KeyFrame frame1 = new KeyFrame(
@@ -151,14 +146,14 @@ public class MainController {
                     new KeyValue(keyCircle.radiusProperty(), 80),
                     new KeyValue(keyCircle.layoutXProperty(), 600),
                     new KeyValue(keyCircle.layoutYProperty(), 0),
-                    new KeyValue(keyBtn.layoutXProperty(), 540),
-                    new KeyValue(keyBtn.layoutYProperty(), 5),
+                    new KeyValue(keyButton.layoutXProperty(), 540),
+                    new KeyValue(keyButton.layoutYProperty(), 5),
 
                     new KeyValue(returnCircle.radiusProperty(), 80),
                     new KeyValue(returnCircle.layoutXProperty(), 600),
                     new KeyValue(returnCircle.layoutYProperty(), 400),
-                    new KeyValue(returnBtn.layoutXProperty(), 540),
-                    new KeyValue(returnBtn.layoutYProperty(), 340)
+                    new KeyValue(returnButton.layoutXProperty(), 540),
+                    new KeyValue(returnButton.layoutYProperty(), 340)
             );
             timeline.getKeyFrames().addAll(frame0, frame1);
         }
@@ -186,12 +181,12 @@ public class MainController {
     private void changeKeyBtnBackground() {
         App.getRsa().ifPresentOrElse(
                 r -> {
-                    keyBtn.getStyleClass().removeAll("keyBtn-not-changed");
-                    keyBtn.getStyleClass().addAll("keyBtn-changed");
+                    keyButton.getStyleClass().removeAll("keyButton-not-changed");
+                    keyButton.getStyleClass().addAll("keyButton-changed");
                 },
                 () -> {
-                    keyBtn.getStyleClass().removeAll("keyBtn-changed");
-                    keyBtn.getStyleClass().addAll("keyBtn-not-changed");
+                    keyButton.getStyleClass().removeAll("keyButton-changed");
+                    keyButton.getStyleClass().addAll("keyButton-not-changed");
                 }
         );
     }

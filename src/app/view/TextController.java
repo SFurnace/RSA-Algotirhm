@@ -115,6 +115,7 @@ public class TextController {
         );
     }
 
+    // todo: 将代码中的CSS部分写到css文件里面。
     private void clearTextAreaBColor() {
         textInputE.setStyle("-fx-background-color: #ffffff");
         textInputD.setStyle("-fx-background-color: #ffffff");
