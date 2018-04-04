@@ -39,6 +39,7 @@ public class RSA {
         }
     }
 
+    @SuppressWarnings("WeakerAccess")
     public BigInteger encryptLong(long l) {
         return encrypt(BigInteger.valueOf(l));
     }
@@ -71,11 +72,11 @@ public class RSA {
     public <T extends Serializable> T decryptObj(byte[] content) throws IOException, ClassNotFoundException {
         try (ByteArrayInputStream buf = new ByteArrayInputStream(content);
              ObjectInputStream stream = new ObjectInputStream(buf)) {
-            ArrayList<BigInteger> list = (ArrayList<BigInteger>) stream.readObject();
+            ArrayList list = (ArrayList) stream.readObject();
 
             int[] integers = new int[list.size()];
             for (int i = 0; i < list.size(); i++) {
-                integers[i] = encrypt(list.get(i)).byteValue();
+                integers[i] = encrypt((BigInteger) list.get(i)).byteValue();
             }
 
             try (ObjectInputStream in = new ObjectInputStream(new ByteArrayInputStream(convertIntegersToBytes(integers)))) {

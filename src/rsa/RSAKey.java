@@ -1,12 +1,13 @@
 package rsa;
 
+import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.Deque;
 import java.util.LinkedList;
 
 import static java.math.BigInteger.*;
 
-class RSAKey {
+public class RSAKey implements Serializable {
     private BigInteger modulus;
     private BigInteger power;
     private int[] indexes;
@@ -29,7 +30,7 @@ class RSAKey {
         this.indexes = deque.stream().mapToInt(i -> i).toArray();
     }
 
-    public int[] getPowerIndexes() {
+    int[] getPowerIndexes() {
         return indexes.clone();
     }
 

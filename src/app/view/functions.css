@@ -1,0 +1,18 @@
+.app-btn {
+    -fx-background-color: none;
+    -fx-background-size: 70px 70px;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+
+#fileBtn {
+    -fx-background-image: url("image/file.png");
+}
+
+#identityBtn {
+    -fx-background-image: url("image/sign.png");
+}
+
+#textBtn {
+    -fx-background-image: url("image/text.png");
+}

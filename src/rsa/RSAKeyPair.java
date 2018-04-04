@@ -7,19 +7,19 @@ import static java.math.BigInteger.ONE;
 import static java.math.BigInteger.ZERO;
 import static rsa.FunctionUtils.extEuclid;
 
-public class KeyPair {
+public class RSAKeyPair {
     private static final int n0 = 128;
     private static final int n1 = 64;
 
     private RSAKey privateKey;
     private RSAKey publicKey;
 
-    private KeyPair(RSAKey privateKey, RSAKey publicKey) {
+    private RSAKeyPair(RSAKey privateKey, RSAKey publicKey) {
         this.privateKey = privateKey;
         this.publicKey = publicKey;
     }
 
-    public static KeyPair generateKeyPair() {
+    public static RSAKeyPair generateKeyPair() {
         SecureRandom random = new SecureRandom();
         BigInteger p = BigInteger.probablePrime(n0, random);
         BigInteger q = BigInteger.probablePrime(n0, random);
@@ -40,7 +40,7 @@ public class KeyPair {
             d = r.add(d);
         }
 
-        return new KeyPair(new RSAKey(n, e), new RSAKey(n, d));
+        return new RSAKeyPair(new RSAKey(n, e), new RSAKey(n, d));
     }
 
     public RSAKey getPrivateKey() {
