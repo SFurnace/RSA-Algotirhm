@@ -27,7 +27,7 @@ public class TextController {
         for (int i = 0; i < bytes.length; i++) {
             builder.append(bytes[i]);
             builder.append(',');
-            if (i % 15 == 14) {
+            if (i % 60 == 59) {
                 builder.append(System.lineSeparator());
             }
         }
