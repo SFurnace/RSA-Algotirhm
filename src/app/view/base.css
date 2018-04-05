@@ -82,6 +82,15 @@
     -fx-background-image: url("image/warn.png");
 }
 
+/* TextPane.fxml */
+.textarea-warning {
+    text-area-background: #ffb7b3 !important;
+}
+
+.textarea-success {
+    text-area-background: #c2ffd0 !important;
+}
+
 /* base */
 .text-area {
     text-area-background: white;

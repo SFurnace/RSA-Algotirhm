@@ -19,7 +19,6 @@ import java.nio.file.Path;
 import java.util.List;
 
 import static app.view.FileController.*;
-import static app.view.MainController.getMainController;
 import static javafx.scene.control.Alert.AlertType.WARNING;
 import static javafx.scene.input.TransferMode.COPY;
 
@@ -46,7 +45,7 @@ public class IdentityController {
                     } catch (Exception e) {
                         e.printStackTrace();
                         new Alert(WARNING, "Cannot generate a identity file.").showAndWait();
-                        getMainController().changeToFunctionsPane();
+                        MainController.changeToFunctionsPane();
                     }
                 },
                 () -> System.exit(-1)

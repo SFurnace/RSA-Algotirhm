@@ -13,6 +13,7 @@ import java.util.TimerTask;
 import static javafx.scene.control.Alert.AlertType.WARNING;
 
 public class TextController {
+    private static final int DELAY = 1000;
     @FXML
     private TextArea textInputE;
     @FXML
@@ -37,7 +38,7 @@ public class TextController {
                 encryptText();
             }
         };
-        timerE.schedule(timerTaskE, 1000);
+        timerE.schedule(timerTaskE, DELAY);
     }
 
     private void encryptText() {
@@ -45,10 +46,10 @@ public class TextController {
                 rsa -> Platform.runLater(() -> {
                     try {
                         textInputD.setText(Arrays.toString(rsa.encryptObj(textInputE.getText())));
-                        textInputE.setStyle("text-area-background: rgba(188,255,209,0.5)");
+                        textInputE.getStyleClass().setAll("textarea-success");
                     } catch (Exception e) {
                         e.printStackTrace();
-                        textInputE.setStyle("text-area-background: rgba(255,181,174,0.51)");
+                        textInputE.getStyleClass().setAll("textarea-warning");
                     }
                 }),
                 () -> Platform.runLater(
@@ -73,7 +74,7 @@ public class TextController {
                 decryptText();
             }
         };
-        timerD.schedule(timerTaskD, 1000);
+        timerD.schedule(timerTaskD, DELAY);
     }
 
     private void decryptText() {
@@ -91,10 +92,10 @@ public class TextController {
                     Platform.runLater(() -> {
                         try {
                             textInputE.setText(rsa.decryptObj(bytes));
-                            textInputD.setStyle("text-area-background: rgba(188,255,209,0.51)");
+                            textInputD.getStyleClass().setAll("textarea-success");
                         } catch (Exception e) {
                             e.printStackTrace();
-                            textInputD.setStyle("text-area-background: rgba(255,181,174,0.5)");
+                            textInputD.getStyleClass().setAll("textarea-warning");
                         }
                     });
                 },
@@ -104,9 +105,8 @@ public class TextController {
         );
     }
 
-    // todo: 将代码中的CSS部分写到css文件里面。
     private void clearTextAreaBColor() {
-        textInputE.setStyle("-fx-background-color: #ffffff");
-        textInputD.setStyle("-fx-background-color: #ffffff");
+        textInputE.getStyleClass().clear();
+        textInputD.getStyleClass().clear();
     }
 }

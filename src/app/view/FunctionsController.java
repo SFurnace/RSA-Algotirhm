@@ -2,21 +2,19 @@ package app.view;
 
 import javafx.fxml.FXML;
 
-import static app.view.MainController.getMainController;
-
 public class FunctionsController {
     @FXML
     private void clickTextBtn() {
-        getMainController().changeToTextPane();
+        MainController.changeToTextPane();
     }
 
     @FXML
     private void clickIdentityBtn() {
-        getMainController().changeToIdentityPane();
+        MainController.changeToIdentityPane();
     }
 
     @FXML
     private void clickFileBtn() {
-        getMainController().changeToFilePane();
+        MainController.changeToFilePane();
     }
 }

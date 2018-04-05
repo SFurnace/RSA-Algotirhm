@@ -22,8 +22,8 @@ import static javafx.scene.control.Alert.AlertType.ERROR;
 import static javafx.scene.control.Alert.AlertType.WARNING;
 
 public class MainController {
-    private static MainController mainController;
-
+    private static final Duration ANIMATE_DURATION = Duration.seconds(0.5);
+    private static MainController singleton;
     @FXML
     private Pane mainPane;
     @FXML
@@ -35,8 +35,20 @@ public class MainController {
     @FXML
     private Button keyButton;
 
-    static MainController getMainController() {
-        return mainController;
+    static void changeToFunctionsPane() {
+        singleton.changePane("FunctionsPane.fxml", true);
+    }
+
+    static void changeToFilePane() {
+        singleton.changePane("FilePane.fxml", false);
+    }
+
+    static void changeToTextPane() {
+        singleton.changePane("TextPane.fxml", false);
+    }
+
+    static void changeToIdentityPane() {
+        singleton.changePane("IdentityPane.fxml", false);
     }
 
     @FXML
@@ -74,7 +86,7 @@ public class MainController {
     }
 
     public void initialize() {
-        MainController.mainController = this;
+        MainController.singleton = this;
 
         changeKeyBtnBackground();
         changeToFunctionsPane();
@@ -87,11 +99,10 @@ public class MainController {
                 mainPane.getChildren().clear();
                 mainPane.getChildren().add(node);
 
-                Duration duration = Duration.seconds(0.5);
                 if (toFunctionsPane) {
-                    toFunctionsPaneAnimate(node, duration);
+                    toFunctionsPaneAnimate(node);
                 } else {
-                    toAnotherPaneAnimate(node, duration);
+                    toAnotherPaneAnimate(node);
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -103,10 +114,10 @@ public class MainController {
         }
     }
 
-    private void toFunctionsPaneAnimate(Node node, Duration duration) {
+    private void toFunctionsPaneAnimate(Node node) {
         Timeline timeline = new Timeline();
         KeyFrame startFrame = new KeyFrame(Duration.ZERO, new KeyValue(node.opacityProperty(), 0));
-        KeyFrame endFrame = new KeyFrame(duration,
+        KeyFrame endFrame = new KeyFrame(MainController.ANIMATE_DURATION,
                 new KeyValue(node.opacityProperty(), 1),
 
                 new KeyValue(keyCircle.radiusProperty(), 35),
@@ -128,16 +139,16 @@ public class MainController {
         timeline.play();
     }
 
-    private void toAnotherPaneAnimate(Node node, Duration duration) {
+    private void toAnotherPaneAnimate(Node node) {
         Timeline timeline = new Timeline();
         KeyFrame startFrame = new KeyFrame(Duration.ZERO, new KeyValue(node.opacityProperty(), 0));
         KeyFrame frame1 = new KeyFrame(
-                duration.divide(100),
+                MainController.ANIMATE_DURATION.divide(100),
                 new KeyValue(returnCircle.visibleProperty(), true),
                 new KeyValue(returnButton.visibleProperty(), true)
         );
         KeyFrame endFrame = new KeyFrame(
-                duration,
+                MainController.ANIMATE_DURATION,
                 new KeyValue(node.opacityProperty(), 1),
 
                 new KeyValue(keyCircle.radiusProperty(), 80),
@@ -155,22 +166,6 @@ public class MainController {
 
         timeline.getKeyFrames().addAll(startFrame, frame1, endFrame);
         timeline.play();
-    }
-
-    void changeToFunctionsPane() {
-        changePane("FunctionsPane.fxml", true);
-    }
-
-    void changeToFilePane() {
-        changePane("FilePane.fxml", false);
-    }
-
-    void changeToTextPane() {
-        changePane("TextPane.fxml", false);
-    }
-
-    void changeToIdentityPane() {
-        changePane("IdentityPane.fxml", false);
     }
 
     private void changeKeyBtnBackground() {
