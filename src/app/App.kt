@@ -25,7 +25,7 @@ class App : Application() {
         }
 
         primaryStage.title = "RSA"
-        primaryStage.scene = Scene(load<Parent>(javaClass.getResource("view/MainPane.fxml")))
+        primaryStage.scene = Scene(load<Parent>(javaClass.getResource("view/fxml/MainPane.fxml")))
         primaryStage.isResizable = false
         primaryStage.show()
     }

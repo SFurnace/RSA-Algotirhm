@@ -64,7 +64,7 @@ class MainController {
     }
 
     private fun changePane(fileName: String, toFunctionsPane: Boolean) {
-        if (App.rsa != null) {
+        if (App.rsa != null || toFunctionsPane) {
             try {
                 val node = FXMLLoader.load<Node>(javaClass.getResource(fileName))
                 mainPane.children.clear()
@@ -161,19 +161,19 @@ class MainController {
         private lateinit var singleton: MainController
 
         internal fun changeToFunctionsPane() {
-            singleton.changePane("FunctionsPane.fxml", true)
+            singleton.changePane("fxml/FunctionsPane.fxml", true)
         }
 
         internal fun changeToFilePane() {
-            singleton.changePane("FilePane.fxml", false)
+            singleton.changePane("fxml/FilePane.fxml", false)
         }
 
         internal fun changeToTextPane() {
-            singleton.changePane("TextPane.fxml", false)
+            singleton.changePane("fxml/TextPane.fxml", false)
         }
 
         internal fun changeToIdentityPane() {
-            singleton.changePane("IdentityPane.fxml", false)
+            singleton.changePane("fxml/IdentityPane.fxml", false)
         }
     }
 }
