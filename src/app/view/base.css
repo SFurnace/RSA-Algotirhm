@@ -87,8 +87,16 @@
     text-area-background: #ffb7b3 !important;
 }
 
+.textarea-warning .content {
+    -fx-background-color: text-area-background;
+}
+
 .textarea-success {
     text-area-background: #c2ffd0 !important;
+}
+
+.textarea-success .content {
+    -fx-background-color: text-area-background;
 }
 
 /* base */
