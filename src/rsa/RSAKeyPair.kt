@@ -5,10 +5,10 @@ import java.math.BigInteger.ONE
 import java.math.BigInteger.ZERO
 import java.security.SecureRandom
 
-class RSAKeyPair private constructor(val privateKey: RSAKey, val publicKey: RSAKey) {
+class RSAKeyPair(val privateKey: RSAKey, val publicKey: RSAKey) {
     companion object {
-        private val n0 = 128
-        private val n1 = 64
+        private const val n0 = 128
+        private const val n1 = 64
 
         fun generateKeyPair(): RSAKeyPair {
             val random = SecureRandom()
@@ -17,19 +17,22 @@ class RSAKeyPair private constructor(val privateKey: RSAKey, val publicKey: RSAK
 
             val n = p.multiply(q)
             val r = p.subtract(ONE).multiply(q.subtract(ONE))
-            val e: BigInteger
-            var d: BigInteger
-
-            while (true) {
-                val b = BigInteger.probablePrime(n1, random)
-                if (r.gcd(b) == ONE) {
-                    e = b
-                    break
+            val e = run {
+                var b = BigInteger.probablePrime(n1, random)
+                while (true) {
+                    if (r.gcd(b) == ONE) {
+                        break
+                    } else {
+                        b = BigInteger.probablePrime(n1, random)
+                    }
                 }
+                return@run b
             }
-            d = extEuclid(r, e)[1]
-            if (d.compareTo(ZERO) < 0) {
-                d = r.add(d)
+            val d = extEuclid(r, e)[1].let {
+                when {
+                    (it > ZERO) -> it
+                    else -> r.add(it)
+                }
             }
 
             return RSAKeyPair(RSAKey(n, e), RSAKey(n, d))

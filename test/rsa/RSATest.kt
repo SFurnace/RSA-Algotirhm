@@ -2,9 +2,8 @@ package rsa
 
 import org.junit.jupiter.api.Test
 import java.io.IOException
-import java.util.*
 
-internal class RSATest {
+class RSATest {
     @Test
     @Throws(IOException::class, ClassNotFoundException::class)
     fun test0() {
@@ -16,7 +15,7 @@ internal class RSATest {
         val decrypted = rsa1.decryptObj<String>(encrypted)
 
         println(str)
-        println(Arrays.toString(encrypted))
+        println(encrypted.contentToString())
         println(decrypted)
     }
 }

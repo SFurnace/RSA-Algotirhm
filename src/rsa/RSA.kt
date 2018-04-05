@@ -1,23 +1,21 @@
 package rsa
 
+import rsa.RSAKey.Operation.MULTIPLE
 import java.io.*
 import java.math.BigInteger
 
 class RSA(val key: RSAKey) {
-    private fun encrypt(integer: BigInteger): BigInteger {
+    private fun operateOn(integer: BigInteger): BigInteger {
         if (integer > key.modulus) {
             throw IllegalArgumentException("Too Big.")
         } else {
             var result = integer
-
             for (i in key.powerIndexes) {
-                if (i == 1) {
-                    result = result.multiply(integer).mod(key.modulus)
-                } else {
-                    result = result.multiply(result).mod(key.modulus)
+                when (i) {
+                    MULTIPLE -> result = result.multiply(integer).mod(key.modulus)
+                    else -> result = result.multiply(result).mod(key.modulus)
                 }
             }
-
             return result
         }
     }
@@ -29,7 +27,7 @@ class RSA(val key: RSAKey) {
      * @return 加密结果
      */
     fun encryptLong(l: Long): BigInteger {
-        return encrypt(BigInteger.valueOf(l))
+        return operateOn(BigInteger.valueOf(l))
     }
 
     /**
@@ -67,7 +65,7 @@ class RSA(val key: RSAKey) {
         ByteArrayInputStream(content).use { buf ->
             ObjectInputStream(buf).use { stream ->
                 val list = (stream.readObject() as List<*>).filterIsInstance<BigInteger>()
-                val integers = list.map { encrypt(it).toInt() }
+                val integers = list.map { operateOn(it).toInt() }
 
                 ObjectInputStream(ByteArrayInputStream(integers.convertToBytes())).use { input ->
                     return input.readObject() as T

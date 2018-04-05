@@ -3,28 +3,27 @@ package rsa
 import java.io.Serializable
 import java.math.BigInteger
 import java.math.BigInteger.*
-import java.util.*
 
-class RSAKey internal constructor(val modulus: BigInteger, val power: BigInteger) : Serializable {
-    private val indexes: IntArray
+class RSAKey(val modulus: BigInteger, val power: BigInteger) : Serializable {
+    internal enum class Operation {
+        MULTIPLE, SQUARE
+    }
 
-    internal val powerIndexes: IntArray
-        get() = indexes.clone()
+    internal val powerIndexes: List<Operation>
 
     init {
+        powerIndexes = mutableListOf()
 
-        val deque = LinkedList<Int>()
         var p0 = power
         while (p0 != ONE) {
             if (p0.mod(TWO) == ZERO) {
-                deque.addFirst(2)
+                powerIndexes.add(0, Operation.SQUARE)
                 p0 = p0.divide(TWO)
             } else {
-                deque.addFirst(1)
+                powerIndexes.add(0, Operation.MULTIPLE)
                 p0 = p0.subtract(ONE)
             }
         }
-        this.indexes = deque.stream().mapToInt { i -> i }.toArray()
     }
 
     override fun toString(): String {
