@@ -10,15 +10,15 @@
         <Pane fx:id="identityFilePane" onDragDetected="#identityFilePaneDragDetected"
               onDragDone="#identityFilePaneDragDone" prefHeight="200.0" prefWidth="200.0">
             <styleClass>
-                <String fx:value="dropPane"/>
-                <String fx:value="dropPane-has-file"/>
+                <String fx:value="interactive-pane"/>
+                <String fx:value="interactive-pane-mark"/>
             </styleClass>
         </Pane>
         <Pane fx:id="verifyPane" onDragDropped="#verifyPaneDragDropped" onDragOver="#verifyPaneDragOver"
               prefHeight="200.0" prefWidth="200.0">
             <styleClass>
-                <String fx:value="dropPane"/>
-                <String fx:value="dropPane-can-drop"/>
+                <String fx:value="interactive-pane"/>
+                <String fx:value="interactive-pane-enable"/>
             </styleClass>
         </Pane>
     </items>

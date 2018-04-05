@@ -1,5 +1,5 @@
 /* MainPane.fxml */
-.main-button {
+.main-pane-button {
     -fx-content-display: graphic-only;
     -fx-background-color: none;
     -fx-background-repeat: no-repeat;
@@ -7,40 +7,40 @@
     -fx-background-size: 60px 60px;
 }
 
-.keyButton-changed {
+.key-button-active {
     -fx-background-image: url("image/key.png");
 }
 
-.keyButton-not-changed {
+.key-button-inactive {
     -fx-background-image: url("image/no-key.png");
 }
 
-#returnButton {
+#return-button {
     -fx-background-image: url("image/return.png");
 }
 
 /* FunctionsPane.fxml */
-.functions-button {
+.functions-pane-button {
     -fx-background-color: none;
     -fx-background-size: 70px 70px;
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
 }
 
-#fileButton {
+#file-button {
     -fx-background-image: url("image/file.png");
 }
 
-#identityButton {
+#identity-button {
     -fx-background-image: url("image/identity.png");
 }
 
-#textButton {
+#text-button {
     -fx-background-image: url("image/text.png");
 }
 
 /* FilePane.fxml */
-.dropPane {
+.interactive-pane {
     -fx-opacity: 0.7;
     -fx-background-color: none;
     -fx-background-size: 100px 100px;
@@ -48,36 +48,36 @@
     -fx-background-position: center;
 }
 
-.dropPane:hover {
+.interactive-pane:hover {
     -fx-opacity: 0.9 !important;
 }
 
-.dropPane-can-drop {
+.interactive-pane-enable {
     -fx-background-image: url("image/drop.png");
 }
 
-.dropPane-cannot-drop {
+.interactive-pane-disable {
     -fx-background-color: #c3c3c3 !important;
     -fx-background-image: url("image/no-drop.png");
 }
 
-.dropPane-processing {
+.interactive-pane-processing {
     -fx-background-color: #ffefb1 !important;
     -fx-background-image: url("image/processing.png");
 }
 
-.dropPane-success {
+.interactive-pane-success {
     -fx-background-color: #c2ffd0 !important;
     -fx-background-image: url("image/success.png");
 }
 
-.dropPane-has-file {
+.interactive-pane-mark {
     -fx-background-color: #bcd8ff !important;
     -fx-background-image: url("image/has-file.png");
 }
 
 /* IdentityPane.fxml */
-.dropPane-warning {
+.interactive-pane-warning {
     -fx-background-color: #ffb7b3 !important;
     -fx-background-image: url("image/warn.png");
 }

@@ -10,12 +10,12 @@ private val ADDEND = 128
 /**
  * 将一个 [ByteArray] 转换为一个全是非负数的 [IntArray]
  */
-internal fun ByteArray.convertToPositiveInt(): Collection<Int> = this.map { it.toInt() + ADDEND }
+internal fun ByteArray.convertToPositiveInt(): IntArray = this.map { it.toInt() + ADDEND }.toIntArray()
 
 /**
  * 将一个 [IntArray] 转换为 [ByteArray] 数组
  */
-internal fun Collection<Int>.convertToBytes(): ByteArray = this.map { (it - rsa.ADDEND).toByte() }.toByteArray()
+internal fun IntArray.convertToBytes(): ByteArray = this.map { (it - rsa.ADDEND).toByte() }.toByteArray()
 
 /**
  * 实现了扩展欧几里得算法，用于找到以下方程中的一组(X, Y)。

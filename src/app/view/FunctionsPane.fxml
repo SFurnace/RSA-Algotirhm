@@ -16,15 +16,15 @@
         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="NEVER"/>
     </rowConstraints>
     <children>
-        <Button fx:id="textButton" alignment="BOTTOM_CENTER" contentDisplay="BOTTOM" maxHeight="1.7976931348623157E308"
+        <Button fx:id="text-button" alignment="BOTTOM_CENTER" contentDisplay="BOTTOM" maxHeight="1.7976931348623157E308"
                 maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#clickTextBtn"
-                styleClass="functions-button" text="Encrypt/Decrypt Text" GridPane.columnIndex="1"/>
-        <Button fx:id="identityButton" alignment="BOTTOM_CENTER" contentDisplay="BOTTOM"
+                styleClass="functions-pane-button" text="Encrypt/Decrypt Text" GridPane.columnIndex="1"/>
+        <Button fx:id="identity-button" alignment="BOTTOM_CENTER" contentDisplay="BOTTOM"
                 maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false"
-                onAction="#clickIdentityBtn" opacity="0.8" styleClass="functions-button" text="Verify Signature"
+                onAction="#clickIdentityBtn" opacity="0.8" styleClass="functions-pane-button" text="Verify Signature"
                 GridPane.columnIndex="2" GridPane.rowIndex="2"/>
-        <Button fx:id="fileButton" alignment="BOTTOM_CENTER" contentDisplay="BOTTOM" maxHeight="1.7976931348623157E308"
+        <Button fx:id="file-button" alignment="BOTTOM_CENTER" contentDisplay="BOTTOM" maxHeight="1.7976931348623157E308"
                 maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#clickFileBtn" opacity="0.8"
-                styleClass="functions-button" text="Encrypt/Decrypt File" GridPane.rowIndex="2"/>
+                styleClass="functions-pane-button" text="Encrypt/Decrypt File" GridPane.rowIndex="2"/>
     </children>
 </GridPane>

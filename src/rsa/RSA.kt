@@ -65,7 +65,7 @@ class RSA(val key: RSAKey) {
         ByteArrayInputStream(content).use { buf ->
             ObjectInputStream(buf).use { stream ->
                 val list = (stream.readObject() as List<*>).filterIsInstance<BigInteger>()
-                val integers = list.map { operateOn(it).toInt() }
+                val integers = list.map { operateOn(it).toInt() }.toIntArray()
 
                 ObjectInputStream(ByteArrayInputStream(integers.convertToBytes())).use { input ->
                     return input.readObject() as T

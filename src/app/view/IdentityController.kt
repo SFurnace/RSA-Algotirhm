@@ -1,55 +1,34 @@
 package app.view
 
 import app.App
-import javafx.application.Platform
+import javafx.application.Platform.runLater
 import javafx.fxml.FXML
-import javafx.scene.control.Alert
-import javafx.scene.control.Alert.AlertType.WARNING
 import javafx.scene.input.ClipboardContent
 import javafx.scene.input.DragEvent
 import javafx.scene.input.MouseEvent
 import javafx.scene.input.TransferMode.COPY
 import javafx.scene.layout.Pane
 import java.io.DataInputStream
-import java.io.DataOutputStream
-import java.io.File
 import java.nio.file.Files
+import kotlin.concurrent.thread
 
 class IdentityController {
-    private val ID = "Hello World!"
-
     @FXML
-    private val identityFilePane: Pane? = null
+    private lateinit var identityFilePane: Pane
     @FXML
-    private val verifyPane: Pane? = null
-
-    private var identityFile: File? = null
-    private var workThread: Thread? = null
-
-    fun initialize() {
-        App.getRsa().ifPresentOrElse(
-                { rsa ->
-                    try {
-                        val path = Files.createTempFile("", "")
-                        DataOutputStream(Files.newOutputStream(path)).use { out -> out.write(rsa.encryptObj(ID)) }
-                        identityFile = path.toFile()
-                    } catch (e: Exception) {
-                        e.printStackTrace()
-                        Alert(WARNING, "Cannot generate a identity file.").showAndWait()
-                        MainController.changeToFunctionsPane()
-                    }
-                }
-        ) { System.exit(-1) }
-    }
+    private lateinit var verifyPane: Pane
+    @Volatile
+    private var workThread: Thread = Thread()
 
     @FXML
     private fun identityFilePaneDragDetected(event: MouseEvent) {
-        val dragboard = identityFilePane!!.startDragAndDrop(COPY)
+        App.identityFile?.let {
+            val dragBoard = identityFilePane.startDragAndDrop(COPY)
+            val content = ClipboardContent()
 
-        val content = ClipboardContent()
-        content.putFiles(List.of<File>(identityFile!!))
-        dragboard.setContent(content)
-
+            content.putFiles(listOf(it))
+            dragBoard.setContent(content)
+        }
         event.consume()
     }
 
@@ -60,44 +39,35 @@ class IdentityController {
 
     @FXML
     private fun verifyPaneDragOver(event: DragEvent) {
-        if ((workThread == null || !workThread!!.isAlive) && event.dragboard.files.size == 1) {
+        if (!workThread.isAlive && event.dragboard.files.size == 1) {
             event.acceptTransferModes(COPY)
         }
         event.consume()
     }
 
     @FXML
-    internal fun verifyPaneDragDropped(event: DragEvent) {
-        val dragboard = event.dragboard
-        val file = dragboard.files[0]
+    private fun verifyPaneDragDropped(event: DragEvent) {
+        verifyPane.setStyleClass(P_PROCESSING)
+        val file = event.dragboard.files[0]
 
         synchronized(this) {
-            if (workThread == null || !workThread!!.isAlive) {
-                setPaneClass(verifyPane!!, PROCESSING_CLASS)
-
-                workThread = Thread {
-                    try {
-                        DataInputStream(Files.newInputStream(file.toPath())).use { `in` ->
-                            val bytes = `in`.readAllBytes()
-                            if (App.getRsa().isPresent) {
-                                val rsa = App.getRsa().get()
-                                if (ID == rsa.decryptObj<Serializable>(bytes)) {
-                                    Platform.runLater { setPaneClass(verifyPane, SUCCESS_CLASS) }
-                                } else {
-                                    Platform.runLater { setPaneClass(verifyPane, WARNING_CLASS) }
-                                }
+            workThread = thread(isDaemon = true, name = "verify id file") {
+                try {
+                    DataInputStream(Files.newInputStream(file.toPath())).use { input ->
+                        App.rsa?.let {
+                            if (App.ID_STRING == it.decryptObj(input.readAllBytes())) {
+                                runLater { verifyPane.setStyleClass(P_SUCCESS) }
                             } else {
-                                throw NullPointerException("You have to set RSA Key file first!")
+                                runLater { verifyPane.setStyleClass(P_WARNING) }
                             }
+                        } ?: run {
+                            throw NullPointerException("You have to set RSA Key file first!")
                         }
-                    } catch (e: Exception) {
-                        e.printStackTrace()
-                        Platform.runLater { setPaneClass(verifyPane, WARNING_CLASS) }
                     }
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    runLater { verifyPane.setStyleClass(P_WARNING) }
                 }
-
-                workThread!!.isDaemon = true
-                workThread!!.start()
             }
         }
 

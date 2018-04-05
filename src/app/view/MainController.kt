@@ -16,66 +16,58 @@ import javafx.scene.shape.Circle
 import javafx.stage.FileChooser
 import javafx.stage.FileChooser.ExtensionFilter
 import javafx.util.Duration
-import java.io.IOException
+import kotlin.system.exitProcess
 
 class MainController {
     @FXML
-    private val mainPane: Pane? = null
+    private lateinit var mainPane: Pane
     @FXML
-    private val returnButton: Button? = null
+    private lateinit var returnButton: Button
     @FXML
-    private val returnCircle: Circle? = null
+    private lateinit var returnCircle: Circle
     @FXML
-    private val keyCircle: Circle? = null
+    private lateinit var keyCircle: Circle
     @FXML
-    private val keyButton: Button? = null
-
-    @FXML
-    fun clickKeyBtn() {
-        val alert = KeyAlert()
-        alert.showAndWait().ifPresent { r ->
-            if (r == KeyAlert.CHOOSE) {
-                val chooser = FileChooser()
-                chooser.title = "Choose RSA Key File"
-                chooser.extensionFilters.setAll(ExtensionFilter("RSA Key File", "*.pub", "*.pri"))
-
-                val file = chooser.showOpenDialog(App.primaryStage)
-                if (file != null) {
-                    App.setRSA(file.toPath())
-                    changeKeyBtnBackground()
-                }
-            } else if (r == KeyAlert.GENERATE) {
-                val chooser = FileChooser()
-                chooser.title = "Generate RSA Key Files"
-                chooser.extensionFilters.setAll(ExtensionFilter("RSA Key File", "*.pub"))
-                chooser.initialFileName = "key.pub"
-
-                val file1 = chooser.showSaveDialog(App.primaryStage)
-                if (file1 != null) {
-                    val file2 = file1.toPath().resolveSibling(file1.name.replace("pub$".toRegex(), "pri")).toFile()
-                    App.generateKeyFiles(file1.toPath(), file2.toPath())
-                }
-            }
-        }
-    }
+    private lateinit var keyButton: Button
 
     @FXML
     fun clickReturnBtn() {
         changeToFunctionsPane()
     }
 
-    fun initialize() {
-        MainController.singleton = this
+    @FXML
+    fun clickKeyBtn() {
+        KeyAlert().showAndWait().ifPresent { buttonType ->
+            val chooser = FileChooser()
+            when (buttonType) {
+                KeyAlert.CHOOSE -> {
+                    chooser.title = "Choose RSA Key File"
+                    chooser.extensionFilters.setAll(ExtensionFilter("RSA Key File", "*.pub", "*.pri"))
 
-        changeKeyBtnBackground()
-        changeToFunctionsPane()
+                    chooser.showOpenDialog(App.primaryStage)?.let {
+                        App.setRSAFromFile(it.toPath())
+                        changeKeyBtnBackground()
+                    }
+                }
+                KeyAlert.GENERATE -> {
+                    chooser.title = "Generate RSA Key Files"
+                    chooser.extensionFilters.setAll(ExtensionFilter("RSA Key File", "*.pub"))
+                    chooser.initialFileName = "key.pub"
+
+                    chooser.showSaveDialog(App.primaryStage)?.let {
+                        val file2 = it.toPath().resolveSibling(it.name.replace("pub$".toRegex(), "pri")).toFile()
+                        App.generateKeyFiles(it.toPath(), file2.toPath())
+                    }
+                }
+            }
+        }
     }
 
     private fun changePane(fileName: String, toFunctionsPane: Boolean) {
-        if (App.getRsa().isPresent || toFunctionsPane) {
+        if (App.rsa != null) {
             try {
                 val node = FXMLLoader.load<Node>(javaClass.getResource(fileName))
-                mainPane!!.children.clear()
+                mainPane.children.clear()
                 mainPane.children.add(node)
 
                 if (toFunctionsPane) {
@@ -83,58 +75,57 @@ class MainController {
                 } else {
                     toAnotherPaneAnimate(node)
                 }
-            } catch (e: IOException) {
+            } catch (e: Exception) {
                 e.printStackTrace()
                 Alert(ERROR, e.message).showAndWait()
-                System.exit(-1)
+                exitProcess(-1)
             }
-
         } else {
             Alert(WARNING, "Please select a RSA Key file.").showAndWait()
         }
     }
 
     private fun toFunctionsPaneAnimate(node: Node) {
-        val timeline = Timeline()
+        val timeLine = Timeline()
         val startFrame = KeyFrame(Duration.ZERO, KeyValue(node.opacityProperty(), 0))
         val endFrame = KeyFrame(MainController.ANIMATE_DURATION,
                 KeyValue(node.opacityProperty(), 1),
 
-                KeyValue(keyCircle!!.radiusProperty(), 35),
+                KeyValue(keyCircle.radiusProperty(), 35),
                 KeyValue(keyCircle.layoutXProperty(), 300),
                 KeyValue(keyCircle.layoutYProperty(), 200),
-                KeyValue(keyButton!!.layoutXProperty(), 270),
+                KeyValue(keyButton.layoutXProperty(), 270),
                 KeyValue(keyButton.layoutYProperty(), 170),
 
-                KeyValue(returnCircle!!.radiusProperty(), 35),
+                KeyValue(returnCircle.radiusProperty(), 35),
                 KeyValue(returnCircle.layoutXProperty(), 300),
                 KeyValue(returnCircle.layoutYProperty(), 200),
                 KeyValue(returnCircle.visibleProperty(), false),
-                KeyValue(returnButton!!.layoutXProperty(), 270),
+                KeyValue(returnButton.layoutXProperty(), 270),
                 KeyValue(returnButton.layoutYProperty(), 170),
                 KeyValue(returnButton.visibleProperty(), false)
         )
 
-        timeline.keyFrames.addAll(startFrame, endFrame)
-        timeline.play()
+        timeLine.keyFrames.addAll(startFrame, endFrame)
+        timeLine.play()
     }
 
     private fun toAnotherPaneAnimate(node: Node) {
-        val timeline = Timeline()
+        val timeLine = Timeline()
         val startFrame = KeyFrame(Duration.ZERO, KeyValue(node.opacityProperty(), 0))
         val frame1 = KeyFrame(
                 MainController.ANIMATE_DURATION.divide(100.0),
-                KeyValue(returnCircle!!.visibleProperty(), true),
-                KeyValue(returnButton!!.visibleProperty(), true)
+                KeyValue(returnCircle.visibleProperty(), true),
+                KeyValue(returnButton.visibleProperty(), true)
         )
         val endFrame = KeyFrame(
                 MainController.ANIMATE_DURATION,
                 KeyValue(node.opacityProperty(), 1),
 
-                KeyValue(keyCircle!!.radiusProperty(), 80),
+                KeyValue(keyCircle.radiusProperty(), 80),
                 KeyValue(keyCircle.layoutXProperty(), 600),
                 KeyValue(keyCircle.layoutYProperty(), 0),
-                KeyValue(keyButton!!.layoutXProperty(), 540),
+                KeyValue(keyButton.layoutXProperty(), 540),
                 KeyValue(keyButton.layoutYProperty(), 5),
 
                 KeyValue(returnCircle.radiusProperty(), 80),
@@ -144,40 +135,45 @@ class MainController {
                 KeyValue(returnButton.layoutYProperty(), 340)
         )
 
-        timeline.keyFrames.addAll(startFrame, frame1, endFrame)
-        timeline.play()
+        timeLine.keyFrames.addAll(startFrame, frame1, endFrame)
+        timeLine.play()
     }
 
     private fun changeKeyBtnBackground() {
-        App.getRsa().ifPresentOrElse(
-                { r ->
-                    keyButton!!.styleClass.removeAll("keyButton-not-changed")
-                    keyButton.styleClass.addAll("keyButton-changed")
-                }
-        ) {
-            keyButton!!.styleClass.removeAll("keyButton-changed")
-            keyButton.styleClass.addAll("keyButton-not-changed")
+        App.rsa?.run {
+            keyButton.styleClass.removeAll("key-button-inactive")
+            keyButton.styleClass.addAll("key-button-active")
+        } ?: run {
+            keyButton.styleClass.removeAll("key-button-active")
+            keyButton.styleClass.addAll("key-button-inactive")
         }
+    }
+
+    fun initialize() {
+        MainController.singleton = this
+
+        changeKeyBtnBackground()
+        changeToFunctionsPane()
     }
 
     companion object {
         private val ANIMATE_DURATION = Duration.seconds(0.5)
-        private var singleton: MainController? = null
+        private lateinit var singleton: MainController
 
         internal fun changeToFunctionsPane() {
-            singleton!!.changePane("FunctionsPane.fxml", true)
+            singleton.changePane("FunctionsPane.fxml", true)
         }
 
         internal fun changeToFilePane() {
-            singleton!!.changePane("FilePane.fxml", false)
+            singleton.changePane("FilePane.fxml", false)
         }
 
         internal fun changeToTextPane() {
-            singleton!!.changePane("TextPane.fxml", false)
+            singleton.changePane("TextPane.fxml", false)
         }
 
         internal fun changeToIdentityPane() {
-            singleton!!.changePane("IdentityPane.fxml", false)
+            singleton.changePane("IdentityPane.fxml", false)
         }
     }
 }

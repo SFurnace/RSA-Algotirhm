@@ -13,15 +13,15 @@
                 <Pane fx:id="encryptPane" onDragDetected="#dragDetectedE" onDragDone="#dragDoneE"
                       onDragDropped="#dragDroppedE" onDragOver="#dragOver" prefHeight="200.0" prefWidth="200.0">
                     <styleClass>
-                        <String fx:value="dropPane"/>
-                        <String fx:value="dropPane-can-drop"/>
+                        <String fx:value="interactive-pane"/>
+                        <String fx:value="interactive-pane-enable"/>
                     </styleClass>
                 </Pane>
                 <Pane fx:id="decryptPane" onDragDetected="#dragDetectedD" onDragDone="#dragDoneD"
                       onDragDropped="#dragDroppedD" onDragOver="#dragOver" prefHeight="200.0" prefWidth="200.0">
                     <styleClass>
-                        <String fx:value="dropPane"/>
-                        <String fx:value="dropPane-can-drop"/>
+                        <String fx:value="interactive-pane"/>
+                        <String fx:value="interactive-pane-enable"/>
                     </styleClass>
                 </Pane>
             </items>
