@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>pers.drcz</groupId>
-    <artifactId>pers.drcz.RSA-Algorithm</artifactId>
+    <artifactId>RSA-Algorithm</artifactId>
     <version>0.1</version>
 
     <properties>
