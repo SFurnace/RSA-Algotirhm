@@ -79,7 +79,7 @@ class TextController {
                         .filter { it.matches("-?\\d+".toRegex()) }
                         .map { it.toByte() }
                         .toByteArray()
-                val decrypted = it.decryptObj<String>(bytes)
+                val decrypted = it.decryptObj(bytes) as String
 
                 runLater {
                     textInputE.text = decrypted

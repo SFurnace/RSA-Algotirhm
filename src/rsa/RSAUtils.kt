@@ -5,7 +5,7 @@ import java.math.BigInteger
 import java.math.BigInteger.ONE
 import java.math.BigInteger.ZERO
 
-private val ADDEND = 128
+private const val ADDEND = 128
 
 /**
  * 将一个 [ByteArray] 转换为一个全是非负数的 [IntArray]

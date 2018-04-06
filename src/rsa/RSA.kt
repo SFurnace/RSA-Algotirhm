@@ -26,6 +26,7 @@ class RSA(val key: RSAKey) {
      * @param l 一个非负整数
      * @return 加密结果
      */
+    @Suppress("MemberVisibilityCanBePrivate")
     fun encryptLong(l: Long): BigInteger {
         return operateOn(BigInteger.valueOf(l))
     }
@@ -61,14 +62,14 @@ class RSA(val key: RSAKey) {
     /**
      * 解密使用方法 [RSA.encryptObj] 加密的对象，需保证本实例包含的 [RSAKey] 与加密时使用的 [RSAKey] 匹配。
      */
-    fun <T : Serializable> decryptObj(content: ByteArray): T {
+    fun decryptObj(content: ByteArray): Any {
         ByteArrayInputStream(content).use { buf ->
             ObjectInputStream(buf).use { stream ->
                 val list = (stream.readObject() as List<*>).filterIsInstance<BigInteger>()
                 val integers = list.map { operateOn(it).toInt() }.toIntArray()
 
                 ObjectInputStream(ByteArrayInputStream(integers.convertToBytes())).use { input ->
-                    return input.readObject() as T
+                    return input.readObject()
                 }
             }
         }

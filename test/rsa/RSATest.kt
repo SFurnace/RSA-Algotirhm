@@ -10,9 +10,9 @@ class RSATest {
         val rsaKeys = RSAKeyPair.generateKeyPair()
         val rsa0 = RSA(rsaKeys.privateKey)
         val rsa1 = RSA(rsaKeys.publicKey)
-        val str = "Hello World!fjdlksajfldsja;fldjslajfdl;sjalfdjs积分到龙A级分量空甲A啃老反动拉肯江凯撒1"
+        val str = "Hello World! 将代码中的CSS部分写到css文件里面。"
         val encrypted = rsa0.encryptObj(str)
-        val decrypted = rsa1.decryptObj<String>(encrypted)
+        val decrypted = rsa1.decryptObj(encrypted) as String
 
         println(str)
         println(encrypted.contentToString())

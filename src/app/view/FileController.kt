@@ -133,7 +133,7 @@ class FileController {
                 try {
                     DataInputStream(Files.newInputStream(file.toPath())).use { input ->
                         App.rsa?.let {
-                            val encryptedFile = it.decryptObj<RSAEncryptedFile>(input.readAllBytes())
+                            val encryptedFile = it.decryptObj(input.readAllBytes()) as RSAEncryptedFile
                             val path = Files.createTempFile(encryptedFile.fileName, "")
 
                             DataOutputStream(Files.newOutputStream(path)).use { out ->
