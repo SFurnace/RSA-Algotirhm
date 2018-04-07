@@ -18,7 +18,7 @@ object AppConfig {
     }
 
     var lastRSAKeyPath: Path?
-        get() = Paths.get(preferences.get("LastRSAKeyPath", null))
+        get() = preferences.get("LastRSAKeyPath", null)?.let { Paths.get(it) }
         set(value) {
             preferences.put("LastRSAKeyPath", value?.toAbsolutePath().toString())
             preferences.sync()

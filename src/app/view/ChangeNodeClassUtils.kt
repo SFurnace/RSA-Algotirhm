@@ -4,7 +4,7 @@ import javafx.scene.Node
 import javafx.scene.control.TextArea
 import javafx.scene.layout.Pane
 
-internal open class NodeStyleClass(val name: String)
+internal sealed class NodeStyleClass(val name: String)
 internal class InteractivePaneStyleClass(name: String) : NodeStyleClass(name)
 internal class TextAreaStyleClass(name: String) : NodeStyleClass(name)
 
