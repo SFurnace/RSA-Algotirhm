@@ -11,9 +11,9 @@ class RSA(val key: RSAKey) {
         } else {
             var result = integer
             for (i in key.powerIndexes) {
-                when (i) {
-                    MULTIPLE -> result = result.multiply(integer).mod(key.modulus)
-                    else -> result = result.multiply(result).mod(key.modulus)
+                result = when (i) {
+                    MULTIPLE -> result.multiply(integer).mod(key.modulus)
+                    else -> result.multiply(result).mod(key.modulus)
                 }
             }
             return result

@@ -16,12 +16,12 @@ class RSAKey(val modulus: BigInteger, val power: BigInteger) : Serializable {
 
         var p0 = power
         while (p0 != ONE) {
-            if (p0.mod(TWO) == ZERO) {
+            p0 = if (p0.mod(TWO) == ZERO) {
                 powerIndexes.add(0, Operation.SQUARE)
-                p0 = p0.divide(TWO)
+                p0.divide(TWO)
             } else {
                 powerIndexes.add(0, Operation.MULTIPLE)
-                p0 = p0.subtract(ONE)
+                p0.subtract(ONE)
             }
         }
     }
